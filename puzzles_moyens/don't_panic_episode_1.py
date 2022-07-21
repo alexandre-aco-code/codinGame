@@ -27,7 +27,6 @@ for i in range(nb_elevators):
     # elevator_floor: floor on which this elevator is found
     # elevator_pos: position of the elevator on its floor
     elevator_floor, elevator_pos = [int(j) for j in input().split()]
-    # debug(elevator_floor, elevator_pos )
     data[elevator_floor] = elevator_pos
 
 # on ordonne les infos, niveau par niveau
@@ -51,16 +50,12 @@ while True:
         elevator_pos = elevators[clone_floor]
     except:
         elevator_pos = None
-        # debug("no elevator")
-
-    # debug("elevator_pos", elevator_pos)
 
     # si on dépasse sur les bords du terrain
     if clone_pos == width-1 or clone_pos == 0 :
         print("BLOCK")
 
     else:
-
         # si je suis au dernier étage
         if elevator_pos == None:
             if clone_pos < exit_pos and direction == "LEFT":
@@ -68,18 +63,14 @@ while True:
             elif clone_pos > exit_pos and direction == "RIGHT":
                 print("BLOCK")
             else:
-                # debug("elevator_pos = None")
-                # debug("no elevator")
                 print("WAIT")
 
         # si je suis dans un étage intérmédiaire
         else:
             debug("elevator_pos existe:",elevator_pos)
             if clone_pos < elevator_pos and direction == "LEFT":
-                # debug("elevator right:",elevator_pos)
                 print("BLOCK")
             elif clone_pos > elevator_pos and direction == "RIGHT":
-                # debug("elevator left:",elevator_pos)
                 print("BLOCK")
             else:
                 print("WAIT")
