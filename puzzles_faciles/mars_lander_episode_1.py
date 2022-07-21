@@ -1,16 +1,8 @@
 import sys
 
-# import math
-
 # CONSTANTS
 DEBUG = True
 G = 3, 711
-
-
-# MAX_VSPEED_LANDING = 40
-# MAX_HSPEED_LANDING = 20
-# MAX_POWER = 4
-# MAX_ANGLE = 90
 
 # DEBUG
 def debug(*args):
@@ -58,23 +50,6 @@ middle_x_landing_zone = get_middle_x_landing_zone(landing_zone)
 
 x1_landing_zone, x2_landing_zone, y_landing_zone = landing_zone
 
-# CLASSES
-
-# class Pod :
-
-#     def __init__(self):
-#         pass
-
-#     def right_of_landing_zone(self):
-#         pass
-
-#     def left_of_landing_zone(self):
-#         pass
-
-#     def on_landing_zone(self):
-#         pass
-
-
 # GAME LOOP
 while True:
     # X,Y sont les coordonnées en mètres de la capsule.
@@ -112,8 +87,6 @@ while True:
             R = hs
         P = 4
 
-
-
     # La capsule est à droite de la piste
     elif x > x2_landing_zone + 1000:
 
@@ -131,7 +104,6 @@ while True:
                 R = +45  # tourne vers la gauche
                 P = 4
 
-
     # la capsule est a droite de la piste mais se rapproche
     elif x > x2_landing_zone and x < x2_landing_zone + 1000:
         if hs < -90:
@@ -141,11 +113,6 @@ while True:
         else:
             R = hs
         P = 3
-
-
-
-
-
 
     # La capsule est sur la piste d'atterissage
     elif x1_landing_zone < x < x2_landing_zone:
