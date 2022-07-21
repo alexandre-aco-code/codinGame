@@ -16,7 +16,7 @@ STEP_RED = 12
 #DEBUG
 def debug(*args):
     if (DEBUG):
-        print(args, file
+        print(*args, file
               =sys.stderr)  
 
 #PRINTS
@@ -167,7 +167,7 @@ class State(object):
         self.samples_avail = self.get_samples_avail()
         self.samples_to_diag = self.get_samples_to_diag()
         self.samples_id_doable = self.get_samples_id_doable()
-        self.samples_doable = self.get_samples_doable()
+        # self.samples_doable = self.get_samples_doable()
         self.samples_id_ready = self.get_samples_id_ready()
 
         #NOT TAKING WHAT I CARRY INTO ACCOUNT
@@ -187,7 +187,12 @@ class State(object):
         debug("s1",self.first_sample_left_needs)
         debug("s1+2",self.second_and_first_samples_needs)
         debug("s1+2+3",self.all_samples_needs)
-        debug("myRobot_capacity",self.myRobot.get_capacity())
+        debug("myRobot.storage",self.myRobot.get_storage())
+        debug("myRobot.capacity",self.myRobot.get_capacity())
+        debug("full s1",self.first_sample_full_needs)
+        debug("full s2",self.second_sample_full_needs)
+        debug("full s3",self.third_sample_full_needs)
+
 
     #Général
     def _get_player_samples(self, player_id):
@@ -226,6 +231,10 @@ class State(object):
             ordered_needs=dict(sample_list)
         return ordered_needs
 
+
+
+
+
     def get_second_and_first_samples_needs(self):
         needs = [x + y for x, y in zip(self.second_sample_full_needs, self.first_sample_full_needs)]
         expertise = list(self.myRobot.get_expertise().values())
@@ -239,6 +248,10 @@ class State(object):
         carry = list(self.myRobot.get_storage().values())
         res = [max(0,int(x-e-y)) for x, y, e in zip(needs, expertise, carry)]
         return res
+
+
+
+
 
     def get_sample_left_needs(self, number):
         k = list(self.ordered_needs.keys())
@@ -260,6 +273,9 @@ class State(object):
         except :
             return []
 
+
+
+
     def get_needs_from_sample_id(self,id):
         res = []
         for s in self.samples:
@@ -267,8 +283,11 @@ class State(object):
                 res = [s.cost_a,s.cost_b,s.cost_c,s.cost_d,s.cost_e]
         return res
 
-    def get_needs_of_a_sample(self,id):
-        return self.needs.get(id)
+
+
+
+    # def get_needs_of_a_sample(self,id):
+    #     return self.needs.get(id)
 
     #DIAG
     def all_samples_are_diagnosised(self):
@@ -277,6 +296,12 @@ class State(object):
 
     def get_samples_to_diag(self):
         return [s for s in self.samples_avail if s.health == -1]
+        
+    def are_samples_blocked(self):
+        if self.all_samples_are_diagnosised() and self.samples_id_doable == [] and len(self._get_player_samples(MYROBOT_ID)) == 3:
+            return True
+        else :
+            return False
 
     #MOLS 
     def get_samples_id_doable(self):
@@ -295,24 +320,25 @@ class State(object):
         samples_doable = [s for s in self.samples_avail if s.sample_id in self.samples_id_doable]
         return samples_doable
 
-    def get_lowest_needs_sample_id(self):
-        mini = 1000000 
-        id = None
-        for key, value in self.needs.items():
-            if key in self.samples_id_doable:
-                r = 0
-                for x in value :
-                    r += x
-                if r < mini :
-                    mini = r
-                    id = key
-        return id
+    # def get_lowest_needs_sample_id(self):
+    #     mini = 1000000 
+    #     id = None
+    #     for key, value in self.needs.items():
+    #         if key in self.samples_id_doable:
+    #             r = 0
+    #             for x in value :
+    #                 r += x
+    #             if r < mini :
+    #                 mini = r
+    #                 id = key
+    #     return id
 
-    def get_lowest_needs_sample(self):
-        lowest_needs_sample = [s for s in self.samples_avail if s.sample_id == self.lowest_needs_sample_id]
-        if lowest_needs_sample == []:
-            return None
-        return lowest_needs_sample[0]
+    # def get_lowest_needs_sample(self):
+    #     lowest_needs_sample = [s for s in self.samples_avail if s.sample_id == self.lowest_needs_sample_id]
+    #     if lowest_needs_sample == []:
+    #         return None
+    #     return lowest_needs_sample[0]
+
     def is_first_sample_doable(self):
         sum_mols = int(sum(self.first_sample_left_needs))
         if sum_mols == 0 :
@@ -642,11 +668,6 @@ class Diagnosis(State):
         else:
             self.get_diagnosis()
 
-    def are_samples_blocked(self):
-        if self.all_samples_are_diagnosised() and self.samples_id_doable == [] and len(self._get_player_samples(MYROBOT_ID)) == 3:
-            return True
-        else :
-            return False
 
     def remove_sample(self):
         print("CONNECT",self._get_player_samples(MYROBOT_ID)[0].sample_id)
