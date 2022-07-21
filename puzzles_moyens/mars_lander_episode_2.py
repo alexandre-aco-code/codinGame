@@ -1,22 +1,13 @@
 import sys
 
-# import math
-
 # CONSTANTS
 DEBUG = True
 G = 3, 711
-
-
-# MAX_VSPEED_LANDING = 40
-# MAX_HSPEED_LANDING = 20
-# MAX_POWER = 4
-# MAX_ANGLE = 90
 
 # DEBUG
 def debug(*args):
     if (DEBUG):
         print(*args, file=sys.stderr, flush=True)
-
 
 # INPUTS
 def collect_land_data():
@@ -28,11 +19,9 @@ def collect_land_data():
         land_values.append([land_x, land_y])
     return land_values
 
-
 def collect_capsule_data():
     return [int(i) for i in
             input().split()]  # ligne unique constituée de 7 entiers : X Y hSpeed vSpeed fuel rotate power
-
 
 # GENERAL METHODS
 def find_landing_zone(land_values):
@@ -45,11 +34,9 @@ def find_landing_zone(land_values):
         y = x[1]
     return [x1, x2, y]
 
-
 def get_middle_x_landing_zone(landing_zone):
     mid_x = int((landing_zone[0] + landing_zone[1]) / 2)
     return mid_x
-
 
 # CODE
 landing_zone = find_landing_zone(collect_land_data())
@@ -57,23 +44,6 @@ landing_zone = find_landing_zone(collect_land_data())
 middle_x_landing_zone = get_middle_x_landing_zone(landing_zone)
 
 x1_landing_zone, x2_landing_zone, y_landing_zone = landing_zone
-
-# CLASSES
-
-# class Pod :
-
-#     def __init__(self):
-#         pass
-
-#     def right_of_landing_zone(self):
-#         pass
-
-#     def left_of_landing_zone(self):
-#         pass
-
-#     def on_landing_zone(self):
-#         pass
-
 
 # GAME LOOP
 while True:
@@ -112,18 +82,14 @@ while True:
             R = hs
         P = 4
 
-
-
     # La capsule est à droite de la piste
     elif x > x2_landing_zone + 1000:
 
-        # debug(y_landing_zone)
         # pour le cas HAUT PLATEAU
         if y_landing_zone > 2000:
             R = 0
             P = 4
         else:
-
             if hs < -80:
                 R = -10
                 P = 4
@@ -131,9 +97,9 @@ while True:
                 R = +45  # tourne vers la gauche
                 P = 4
 
-
     # la capsule est a droite de la piste mais se rapproche
     elif x > x2_landing_zone and x < x2_landing_zone + 1000:
+        
         if hs < -90:
             R = -90
         elif hs > 90:
@@ -141,11 +107,6 @@ while True:
         else:
             R = hs
         P = 3
-
-
-
-
-
 
     # La capsule est sur la piste d'atterissage
     elif x1_landing_zone < x < x2_landing_zone:
