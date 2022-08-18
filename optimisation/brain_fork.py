@@ -2,6 +2,13 @@ import sys
 import math
 
 DEBUG = True
+instructions = ""
+prev_c = ""
+# rune_position = 1
+runes = {}
+tour = 0
+index = 0
+
 
 # DEBUG
 
@@ -33,21 +40,17 @@ def transform_caracter_to_instruction(c):
         choose_letter = "+" * order
     return choose_letter
 
-def get_last_identical_position(letter) :
-    pos = 0
-    for rune_pos, rune_let in runes.items():
-        if rune_let == letter:
-            pos = rune_pos
-    return pos
+# def get_last_identical_position(letter) :
+#     pos = 0
+#     for rune_pos, rune_let in runes.items():
+#         if rune_let == letter:
+#             pos = rune_pos
+#     return pos
 
 # CODE
 
+
 magic_phrase = get_data()
-instructions = ""
-prev_c = ""
-rune_position = 1
-runes = {}
-tour = 0
 
 for c in magic_phrase:
 
@@ -78,11 +81,17 @@ for c in magic_phrase:
             instruction += ">" + transform_caracter_to_instruction(c) + "."
 
 
+    # 0 >= index >= 30
 
-    # rune_position += instruction.count(">")
-    # rune_position -= instruction.count("<")
+    if 0 >= index < 30:
+        index += instruction.count(">")
+        index -= instruction.count("<")
+    elif index >= 30:
+        pass
 
-    # runes[rune_position] = c
+    runes[index] = c
+
+    debug(runes)
 
     # debug(rune_position,"- letter:",c,"=>", instruction)
     debug("- letter:",c,"=>", instruction)
