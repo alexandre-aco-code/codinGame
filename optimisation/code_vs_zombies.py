@@ -1,58 +1,86 @@
 import sys
 import math
 
-# Save humans, destroy zombies!
+DEBUG = True
+
+def debug(*args):
+    if DEBUG :
+        print(*args, file=sys.stderr)
+
+
+##### CLASSES
+
+class Human():
+
+    def __init__(self,id,x,y):
+
+        self.id = id
+        self.x = x
+        self.y = y
+
+class Zombie():
+
+    def __init__(self,id,x,y,next_x,next_y):
+
+        self.id = id
+        self.x = x
+        self.y = y
+        self.xn = next_x
+        self.yn = next_y
+
+    def calc_dist(self, human_x, human_y):
+        dx = abs(human_x - self.xn)
+        dy = abs(human_y - self.yn)
+        dist = ( dx ** 2 + dy ** 2 ) ** 0.5 
+        return dist
+
+
 
 
 # game loop
 while True:
+    humans = []
+    zombies = []
+    X = Y = 0
+
     x, y = [int(i) for i in input().split()] 
-    
-    humans_x = []
-    humans_y = []
-    
+
     human_count = int(input())
+
     for i in range(human_count):
         human_id, human_x, human_y = [int(j) for j in input().split()]
-    
-    zombies_xnext = []
-    zombies_ynext = []
+        humans.append(Human(human_id, human_x, human_y))
+        debug("human :", human_id, human_x, human_y)
     
     zombie_count = int(input())
     for i in range(zombie_count):
         zombie_id, zombie_x, zombie_y, zombie_xnext, zombie_ynext = [int(j) for j in input().split()]
-        
-        zombies_xnext.append(zombie_xnext)
-        zombies_ynext.append(zombie_ynext)
-
-        # zombies = dict.fromkeys(zombie_id,zombie_x)
-
-    # print("zombies", zombies)
-    # print(human_x, human_y) #EASY SOLUTION
-
-    # print("zombies_xnext",zombies_xnext)
-
-    dist_x = [c - x for c in zombies_xnext]
-    dist_y = [c - y for c in zombies_ynext]
-
-    # zombies = dict.fromkeys(zombies_xnext,zombies_ynext,dist)
-
-    # dist = [(x**2 + y**2)**(1/2) for x,y in zombies_x,zombies_y]
-    # dist = (dist_x**2 = dist_y**2)**0.5
- 
-    
-    dist = [ [(dist_x[x]**2 + dist_y[x]**2)**0.5,x] for x in range(len(dist_x))]  
-    
-    # print(dist)
-    # print("min(dist)",min(dist))
-
-    index_closest_zombie = min(dist)[1]
-
-    # print(zombies_xnext[min(dist[1])])
+        zombies.append(Zombie(zombie_id, zombie_x, zombie_y, zombie_xnext, zombie_ynext))
+        debug("zombie :", zombie_id, zombie_x, zombie_y, zombie_xnext, zombie_ynext)
 
 
+    debug("human_count", human_count)
+    debug("zombie_count", zombie_count)
 
+    if human_count > 0 and human_count != 2 and zombie_count != 2:
+        X, Y = humans[0].x, humans[0].y
+    elif human_count == 2 and zombie_count == 2 : # pour le cas reflexe
+        X, Y = humans[1].x, humans[1].y
+    else:
+        d = {}
+        for z in zombies :
+            d[z.id] = z.calc_dist(x,y)
 
+        debug("d", d)
 
+        id_z_closest = min(d, key=d.get)
 
-    print(zombies_xnext[index_closest_zombie], zombies_ynext[index_closest_zombie])
+        debug("id_z_closest",id_z_closest)
+
+        z = [z for z in zombies if z.id == id_z_closest][0]
+
+        debug(z.id,z.x, z.y,z.xn, z.yn)
+
+        X,Y = z.x,z.y
+
+    print(X, Y)
