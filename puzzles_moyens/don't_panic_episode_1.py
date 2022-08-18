@@ -7,10 +7,6 @@ def debug(*args):
     if DEBUG :
         print(*args, file=sys.stderr)
 
-
-# Auto-generated code below aims at helping you parse
-# the standard input according to the problem statement.
-
 # nb_floors: number of floors
 # width: width of the area
 # nb_rounds: maximum number of rounds
@@ -31,7 +27,6 @@ for i in range(nb_elevators):
 
 # on ordonne les infos, niveau par niveau
 elevators = dict(sorted(data.items(), key=lambda x: x[0]))
-
 
 
 # game loop
